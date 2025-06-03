@@ -1,13 +1,49 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "./Button"
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export const Users = () => {
     // Replace with backend call
-    const [users, setUsers] = useState([{
-        firstName: "Harkirat",
-        lastName: "Singh",
-        _id: 1
-    }]);
+    const [users, setUsers] = useState([]);
+    const [filter,setFilter] = useState("");
+    const [currentUser, setCurrentUser]= useState();
+  
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+       
+    
+        // First get the current user, then get the filtered users
+        const fetchData = async () => {
+          try {
+            const currentUserResponse = await axios.get("http://localhost:5000/api/v1/user/current", {
+              headers: {
+                "Authorization": "Bearer " + token,
+              },
+            });
+    
+            const current = currentUserResponse.data;
+            setCurrentUser(current);
+    
+            const usersResponse = await axios.get(`http://localhost:5000/api/v1/user/bulk?filter=${filter}`, {
+              headers: {
+                "Authorization": "Bearer " + token,
+              },
+            });
+    
+            // Filter out the current user from the users list
+            const filteredUsers = usersResponse.data.user.filter(user => user._id !== current._id);
+            setUsers(filteredUsers);
+    
+          } catch (error) {
+            console.error("Error fetching users:", error);
+          }
+        };
+    
+        fetchData();
+      }, [filter]);
+   
 
     return <>
         <div className="font-bold mt-6 text-lg">
@@ -23,6 +59,8 @@ export const Users = () => {
 }
 
 function User({user}) {
+    const navigate= useNavigate();
+
     return <div className="flex justify-between">
         <div className="flex">
             <div className="rounded-full h-12 w-12 bg-slate-200 flex justify-center mt-1 mr-2">
@@ -38,7 +76,9 @@ function User({user}) {
         </div>
 
         <div className="flex flex-col justify-center h-ful">
-            <Button label={"Send Money"} />
+            <Button onClick={(e) => {
+                navigate("/send?id=" + user._id + "&name=" + user.firstName);
+            }} label={"Send Money"} />
         </div>
     </div>
 }
