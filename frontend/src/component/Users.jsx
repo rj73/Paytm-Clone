@@ -17,7 +17,7 @@ export const Users = () => {
         // First get the current user, then get the filtered users
         const fetchData = async () => {
           try {
-            const currentUserResponse = await axios.get("http://localhost:5000/api/v1/user/current", {
+            const currentUserResponse = await axios.get("https://paytm-clone-oerj.onrender.com/api/v1/user/current", {
               headers: {
                 "Authorization": "Bearer " + token,
               },
@@ -26,7 +26,7 @@ export const Users = () => {
             const current = currentUserResponse.data;
             setCurrentUser(current);
     
-            const usersResponse = await axios.get(`http://localhost:5000/api/v1/user/bulk?filter=${filter}`, {
+            const usersResponse = await axios.get(`https://paytm-clone-oerj.onrender.com/api/v1/user/bulk?filter=${filter}`, {
               headers: {
                 "Authorization": "Bearer " + token,
               },

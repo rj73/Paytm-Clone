@@ -22,7 +22,7 @@ export function SignupComponent(){
 
 
     function submit(){
-      axios.post("http://localhost:5000/api/v1/user/signup",{
+      axios.post("https://paytm-clone-oerj.onrender.com/api/v1/user/signup",{
         userName: username,
         password,
         firstName,

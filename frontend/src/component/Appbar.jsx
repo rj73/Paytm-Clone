@@ -5,7 +5,7 @@ export const Appbar = () => {
     const [currentUser, setCurrentUser]= useState("user");
 
     useEffect(()=>{
-        axios.get("http://localhost:5000/api/v1/user/current",{
+        axios.get("https://paytm-clone-oerj.onrender.com/api/v1/user/current",{
             headers:{
                 "Authorization": "Bearer "+ localStorage.getItem("token")
             }
